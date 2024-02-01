@@ -1,0 +1,42 @@
+name: 发布脚本
+
+on:
+  #监听 push 操作
+  push:
+    branches:
+      - master # 推送 master 分支触发该脚本
+
+jobs:
+  build-and-deploy:
+    # 构建环境使用 ubuntu 指定版本
+    runs-on: ubuntu-22.04
+    # 步骤
+    steps:
+      - name: 1.拉取代码
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: 2.安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.10.0'
+
+      - name: 3.安装依赖
+        run: |
+          npm config set registry "https://registry.npmmirror.com/"
+          npm i
+
+      - name: 4.构建项目
+        run: |
+          npm run build
+
+      - name: 5.部署到服务器
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }} # ssh 私钥
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }} # ssh 主机地址
+          REMOTE_USER: ${{ secrets.SERVER_USER }} # ssh 用户名
+          ARGS: '-rltgoDzvO --delete'
+          SOURCE: 'dist' # 本地目录（多个文件空格分隔，.output 代表复制文件夹，.output/ 代表复制文件夹下的内容）
+          TARGET: /root/h5/three.js-example # 远程目录
