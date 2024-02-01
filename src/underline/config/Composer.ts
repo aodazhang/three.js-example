@@ -89,7 +89,7 @@ export class Composer extends Component {
     this.bloomComposer.renderToScreen = false
     this.bloomComposer.addPass(this.renderPass) // 渲染过程需要最先被添加
     // 辉光效果
-    this.bloomPass = new UnrealBloomPass(new Vector2(), 0.4, 0.55, 0.1)
+    this.bloomPass = new UnrealBloomPass(new Vector2(), 0.2, 0, 0.4)
     this.bloomComposer.addPass(this.bloomPass)
     // 混合效果
     const mixPass = new ShaderPass(
@@ -150,19 +150,19 @@ export class Composer extends Component {
     // 面板控制器
     this.world.debug
       .add(this.bloomPass, 'strength')
-      .name('辉光strength')
+      .name('辉光 strength')
       .min(0)
       .max(2)
       .step(0.01)
     this.world.debug
       .add(this.bloomPass, 'radius')
-      .name('辉光radius')
+      .name('辉光 radius')
       .min(0)
       .max(1)
       .step(0.01)
     this.world.debug
       .add(this.bloomPass, 'threshold')
-      .name('辉光threshold')
+      .name('辉光 threshold')
       .min(0)
       .max(1)
       .step(0.01)

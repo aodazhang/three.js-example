@@ -1,7 +1,7 @@
 precision mediump float;
 
 uniform float uRatio;
-uniform sampler2D uDiffuse;
+uniform float iTime;
 /**
 * 获取 uv
 * 概念：画布上所有像素坐标的归一化后的坐标位置。在glsl小于0得到结果还是0，大于1还是1。
@@ -34,11 +34,10 @@ vec4 drawRect(in float width,in float height,in float thickness){
 }
 
 void main(){
-  // 1.获取当前音频强度：这里通过指定 uv 点，确保 GPU 中所有点获取的值一致
-  float strength=texture2D(uDiffuse,vec2(.5)).r;
-  
-  // 2.矩形数量：根据音频强度变化 0 ~ 10
-  int count=int(strength*10.);
+  // 1.音频强度变化
+  float strength=abs(sin(iTime));
+  // 2.矩形数量：根据音频强度变化 0 ~ 5
+  int count=int(strength*5.);
   
   // 3.矩形参数
   float width=.36;// 矩形宽度
