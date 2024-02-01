@@ -1,5 +1,5 @@
 # three.js-example
 
-一些 three.js 实现的效果合集。
+three.js 实现的场景效果合集。
 
-[选座]()
+[在线选座](https://project.aodazhang.com/three.js-example/#/taodou-ticket)
