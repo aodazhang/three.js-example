@@ -38,5 +38,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_HOST }} # ssh 主机地址
           REMOTE_USER: ${{ secrets.SERVER_USER }} # ssh 用户名
           ARGS: '-rltgoDzvO --delete'
-          SOURCE: 'dist' # 本地目录（多个文件空格分隔，.output 代表复制文件夹，.output/ 代表复制文件夹下的内容）
+          SOURCE: 'dist/' # 本地目录（多个文件空格分隔，.output 代表复制文件夹，.output/ 代表复制文件夹下的内容）
           TARGET: /root/h5/three.js-example # 远程目录
