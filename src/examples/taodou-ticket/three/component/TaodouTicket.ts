@@ -72,7 +72,7 @@ export default class TaodouTicket extends Component<Experience> {
         this.video.playsInline = true
         this.video.loop = true
         this.video.controls = false
-        this.video.volume = 0.01
+        this.video.volume = 0.5
         item.material = new MeshStandardMaterial({
           map: new VideoTexture(this.video)
         })
@@ -122,12 +122,16 @@ export default class TaodouTicket extends Component<Experience> {
     if (!(intersect?.object instanceof Mesh)) {
       return
     }
+    // 选择座位序号
+    let select: number = null
     // 处理座位材质
-    this.places.forEach(item => {
-      ;(item.material as MeshStandardMaterial).color =
-        item === intersect.object
-          ? this.placeSelectColor
-          : this.placeNormalColor
+    this.places.forEach((item, index) => {
+      if (item === intersect.object) {
+        select = index
+        ;(item.material as MeshStandardMaterial).color = this.placeSelectColor
+      } else {
+        ;(item.material as MeshStandardMaterial).color = this.placeNormalColor
+      }
     })
     // 处理座位描边发光效果
     this.world.composer.outlinePass.selectedObjects = [intersect.object]
@@ -136,5 +140,7 @@ export default class TaodouTicket extends Component<Experience> {
       intersect.object.position.clone().add(new Vector3(10, 5, 0)),
       this.focusPosition
     )
+    // [通信]发布选择座位序号
+    this.world.notify('select', select)
   }
 }

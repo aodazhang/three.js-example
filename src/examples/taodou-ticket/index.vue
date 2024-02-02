@@ -6,10 +6,9 @@
   >
     <common-loading v-if="progress < 100" :progress="progress" />
   </div>
-  <div v-if="progress >= 100">
-    <button class="reset" @click="experience.notify('reset')">相机复位</button>
-    <button class="sound" @click="experience.notify('sound')">播放BGM</button>
-  </div>
+  <button v-if="progress >= 100" @click="experience.notify('reset')">
+    相机复位
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -23,7 +22,9 @@ const progress = ref(0)
 
 onMounted(() => {
   experience = new Experience(threeRef.value)
-  experience.on<number>('progress', message => (progress.value = message))
+  experience
+    .on<number>('progress', message => (progress.value = message))
+    .on<number>('select', message => alert(`选择座位序号：${message}`))
 })
 
 onUnmounted(() => {
@@ -39,20 +40,12 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.reset,
-.sound {
+button {
   position: fixed;
   z-index: 10;
+  right: 10px;
   bottom: 10px;
   padding: 6px 12px;
-}
-
-.reset {
-  right: 110px;
-}
-
-.sound {
-  right: 10px;
 }
 </style>
 
