@@ -8,6 +8,7 @@ import {
 } from 'three'
 import { Component, SceneResource } from '@/underline'
 import Experience from '../Experience'
+import sintelMp4 from '@/assets/video/sintel.mp4'
 
 /** 选座购票 */
 export default class TaodouTicket extends Component<Experience> {
@@ -65,16 +66,18 @@ export default class TaodouTicket extends Component<Experience> {
         // 使用视频材质
         this.video = document.createElement('video')
         this.video.crossOrigin = 'anonymous'
-        this.video.src = './video/sintel.mp4'
+        this.video.src = sintelMp4
         this.video.autoplay = true
         this.video.muted = false
         this.video.playsInline = true
         this.video.loop = true
         this.video.controls = false
         this.video.volume = 0.5
-        item.material = new MeshStandardMaterial({
-          map: new VideoTexture(this.video)
-        })
+        this.video.onload = () => {
+          item.material = new MeshStandardMaterial({
+            map: new VideoTexture(this.video)
+          })
+        }
       } else if (item.name.indexOf('光线') > -1) {
         material.color = new Color(0xffffff)
         // 处理光线辉光效果
