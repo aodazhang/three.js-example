@@ -36,23 +36,25 @@ export class Render extends Component {
     // this.renderer.shadowMap.type = PCFShadowMap // [阴影]设置渲染器阴影贴图类型
 
     // 二.css2d、css3d 辅渲染器
-    // this.cssRenderer = new CSS2DRenderer()
-    this.cssRenderer = new CSS3DRenderer()
-    this.cssRenderer.domElement.style.position = 'absolute'
-    this.cssRenderer.domElement.style.zIndex = '1'
-    this.cssRenderer.domElement.style.top = '0px'
-    this.cssRenderer.domElement.style.bottom = '0px'
-    this.cssRenderer.domElement.style.left = '0px'
-    this.cssRenderer.domElement.style.right = '0px'
-    this.cssRenderer.domElement.style.touchAction = 'none'
-    // this.cssRenderer.domElement.style.pointerEvents = 'none'
+    if (this.world.options.useCssRenderer === true) {
+      // this.cssRenderer = new CSS2DRenderer()
+      this.cssRenderer = new CSS3DRenderer()
+      this.cssRenderer.domElement.style.position = 'absolute'
+      this.cssRenderer.domElement.style.zIndex = '1'
+      this.cssRenderer.domElement.style.top = '0px'
+      this.cssRenderer.domElement.style.bottom = '0px'
+      this.cssRenderer.domElement.style.left = '0px'
+      this.cssRenderer.domElement.style.right = '0px'
+      this.cssRenderer.domElement.style.touchAction = 'none'
+      // this.cssRenderer.domElement.style.pointerEvents = 'none'
+    }
   }
 
   override onResize(size: DomElementSize): void {
     const { width, height, ratio } = size
     // 更新 webgl 主渲染器像素比、尺寸
-    this.renderer?.setPixelRatio(ratio)
-    this.renderer?.setSize(width, height)
+    this.renderer.setPixelRatio(ratio)
+    this.renderer.setSize(width, height)
     // 更新 css2d、css3d 辅渲染器尺寸
     this.cssRenderer?.setSize(width, height)
   }
@@ -60,7 +62,7 @@ export class Render extends Component {
   override onUpdate(): void {
     // 更新 webgl 主渲染器（与效果合成器冲突）
     if (!this.world.composer) {
-      this.renderer?.render(this.world.scene, this.world.camera.camera)
+      this.renderer.render(this.world.scene, this.world.camera.camera)
     }
     // 更新 css2d、css3d 辅渲染器
     this.cssRenderer?.render(this.world.scene, this.world.camera.camera)
@@ -68,6 +70,6 @@ export class Render extends Component {
 
   override onDestory(): void {
     // 卸载 webgl 主渲染器
-    this.renderer?.dispose()
+    this.renderer.dispose()
   }
 }

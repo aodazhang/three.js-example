@@ -54,24 +54,25 @@ export class Light extends Component {
 
   override onDebug(): void {
     // 面板控制器
-    this.world.debug
+    this.world.gui
       .add(this.directional.position, 'x')
-      .name('平行光x')
+      .name('平行光 x')
       .min(-500)
       .max(500)
       .step(1)
-    this.world.debug
+    this.world.gui
       .add(this.directional.position, 'y')
-      .name('平行光y')
+      .name('平行光 y')
       .min(-500)
       .max(500)
       .step(1)
-    this.world.debug
+    this.world.gui
       .add(this.directional.position, 'z')
-      .name('平行光z')
+      .name('平行光 z')
       .min(-500)
       .max(500)
       .step(1)
+
     // 平行光 helper
     this.directionalHelper = new DirectionalLightHelper(this.directional, 20)
     this.world.scene.add(this.directionalHelper)
@@ -84,9 +85,9 @@ export class Light extends Component {
 
   override onDestory(): void {
     // 卸载环境光
-    this.ambient?.dispose()
+    this.ambient.dispose()
     // 卸载平行光
-    this.directional?.dispose()
+    this.directional.dispose()
     // 卸载平行光 helper
     this.directionalHelper?.dispose()
   }

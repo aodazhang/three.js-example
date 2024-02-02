@@ -16,8 +16,8 @@ const router = createRouter({
       path: '/taodou-ticket',
       meta: { title: '淘豆购票' },
       component: () => import('@/examples/taodou-ticket/index.vue')
-    }
-    // { path: '/:catchAll(.*)', redirect: '/404' } // 不匹配路由进入404页
+    },
+    { path: '/:catchAll(.*)', redirect: '/' } // 不匹配路由进入首页
   ],
   scrollBehavior(_to, _from, savedPosition) {
     return savedPosition ? savedPosition : { top: 0, left: 0 }

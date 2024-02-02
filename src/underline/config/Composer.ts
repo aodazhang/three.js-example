@@ -133,34 +133,34 @@ export class Composer extends Component {
   override onResize(size: DomElementSize): void {
     const { width, height, ratio } = size
     // 更新效果合成器像素比、尺寸
-    this.composer?.setPixelRatio(ratio)
-    this.composer?.setSize(width, height)
+    this.composer.setPixelRatio(ratio)
+    this.composer.setSize(width, height)
     // 更新辉光效果合成器像素比、尺寸
-    this.bloomComposer?.setPixelRatio(ratio)
-    this.bloomComposer?.setSize(width, height)
+    this.bloomComposer.setPixelRatio(ratio)
+    this.bloomComposer.setSize(width, height)
     // 更新描边发光效果尺寸
-    this.outlinePass?.resolution.set(width, height)
+    this.outlinePass.resolution.set(width, height)
     // 更新辉光效果尺寸
-    this.bloomPass?.resolution.set(width, height)
+    this.bloomPass.resolution.set(width, height)
     // 更新 SMAA 抗锯齿处理尺寸
-    this.smaaPass?.setSize(width, height)
+    this.smaaPass.setSize(width, height)
   }
 
   override onDebug(): void {
     // 面板控制器
-    this.world.debug
+    this.world.gui
       .add(this.bloomPass, 'strength')
       .name('辉光 strength')
       .min(0)
       .max(2)
       .step(0.01)
-    this.world.debug
+    this.world.gui
       .add(this.bloomPass, 'radius')
       .name('辉光 radius')
       .min(0)
       .max(1)
       .step(0.01)
-    this.world.debug
+    this.world.gui
       .add(this.bloomPass, 'threshold')
       .name('辉光 threshold')
       .min(0)
@@ -180,7 +180,7 @@ export class Composer extends Component {
       }
     })
     // 更新辉光效果合成器
-    this.bloomComposer?.render(delta)
+    this.bloomComposer.render(delta)
     // 还原所有 Mesh 材质
     this.world.scene.traverse(item => {
       if (!(item instanceof Mesh)) {
@@ -192,17 +192,17 @@ export class Composer extends Component {
       }
     })
     // 更新效果合成器
-    this.composer?.render(delta)
+    this.composer.render(delta)
   }
 
   override onDestory(): void {
     // 卸载效果合成器
-    this.composer?.dispose()
-    this.composer?.renderTarget1.dispose()
-    this.composer?.renderTarget2.dispose()
+    this.composer.dispose()
+    this.composer.renderTarget1.dispose()
+    this.composer.renderTarget2.dispose()
     // 卸载辉光效果合成器
-    this.bloomComposer?.dispose()
-    this.bloomComposer?.renderTarget1.dispose()
-    this.bloomComposer?.renderTarget2.dispose()
+    this.bloomComposer.dispose()
+    this.bloomComposer.renderTarget1.dispose()
+    this.bloomComposer.renderTarget2.dispose()
   }
 }

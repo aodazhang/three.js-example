@@ -6,10 +6,35 @@ import Stats from 'stats.js'
 import GUI from 'lil-gui'
 import { toolDebounce } from '../utils'
 import { Component, DomElementSize, Emit, LifeCycle, SceneResource } from '.'
-import { Camera, Composer, Environment, Light, Loader, Render } from '../config'
+import { Camera, Composer, Light, Loader, Render } from '../config'
+
+/** 世界配置 */
+export interface WorldOptions {
+  /** 渲染器挂载 dom 节点 */
+  domElement: HTMLElement
+  /** 资源文件 */
+  resource?: Map<string, string>
+  /** 是否开启系统默认灯光 */
+  useLight?: boolean
+  /** 是否开启系统默认 css2d、css3d 辅渲染器 */
+  useCssRenderer?: boolean
+  /** 是否开启系统默认后期处理 */
+  useComposer?: boolean
+  /** 是否开启系统 debug 面板 */
+  useDebug?: boolean
+}
 
 /** 世界类 */
 export class World extends Emit implements LifeCycle {
+  /** 配置 */
+  public options: WorldOptions = {
+    domElement: null,
+    resource: new Map(),
+    useLight: true,
+    useCssRenderer: true,
+    useComposer: true,
+    useDebug: false
+  }
   /** 渲染器挂载 dom 节点 */
   public domElement: HTMLElement = null
   /** 渲染器挂载 dom 节点尺寸 */
@@ -30,26 +55,32 @@ export class World extends Emit implements LifeCycle {
   public composer: Composer = null
   /** 灯光 */
   public light: Light = null
-  /** 环境类 */
-  public environment: Environment = null
   /** 场景组件映射 */
   public readonly sceneMap: Map<string, Component> = new Map()
   /** [debug]帧率监控器 */
   public stats: Stats = null
   /** [debug]面板控制器 */
-  public debug: GUI = null
+  public gui: GUI = null
 
-  constructor(domElement?: HTMLElement, resource?: Map<string, string>) {
+  /**
+   * 构造函数
+   * @param options 配置项
+   * @returns this
+   */
+  constructor(options: WorldOptions) {
     super()
-    this.domElement = domElement
+    this.options = { ...this.options, ...options }
+    this.domElement = this.options.domElement
+    if (!(this.domElement instanceof HTMLElement)) {
+      throw new Error('World domElement is not HTMLElement')
+    }
     this.clock = new Clock()
     this.scene = new Scene()
-    this.loader = new Loader(this, resource)
+    this.loader = new Loader(this)
     this.render = new Render(this)
     this.camera = new Camera(this)
-    this.composer = new Composer(this)
-    this.light = new Light(this)
-    this.environment = new Environment(this)
+    this.options.useComposer === true && (this.composer = new Composer(this))
+    this.options.useLight === true && (this.light = new Light(this))
   }
 
   public onConfig(): void {
@@ -58,16 +89,13 @@ export class World extends Emit implements LifeCycle {
     this.render.onConfig()
     this.camera.onConfig()
     this.composer?.onConfig()
-    this.light.onConfig()
-    this.environment.onConfig()
+    this.light?.onConfig()
     this.sceneMap.forEach(item => item.onConfig())
 
     // [通信]订阅资源加载完毕
     this.on<SceneResource>('ready', message => {
       this.onReady(message)
-      if (window.location.search.indexOf('debug=true') !== -1) {
-        this.onDebug()
-      }
+      this.options.useDebug === true && this.onDebug()
       this.onUpdate()
     })
 
@@ -83,8 +111,8 @@ export class World extends Emit implements LifeCycle {
     this.sceneMap.forEach(item => item.onReady(resource))
 
     // 挂载 webgl主渲染器 + css2d、css3d 辅渲染器
-    this.domElement?.appendChild(this.render.renderer.domElement)
-    this.domElement?.appendChild(this.render.cssRenderer.domElement)
+    this.domElement.appendChild(this.render.renderer.domElement)
+    this.domElement.appendChild(this.render.cssRenderer.domElement)
   }
 
   public onDebug(): void {
@@ -95,22 +123,21 @@ export class World extends Emit implements LifeCycle {
     this.stats.dom.style.zIndex = '2'
     this.stats.dom.style.top = '10px'
     this.stats.dom.style.left = '10px'
-    this.domElement?.appendChild(this.stats.dom)
+    this.domElement.appendChild(this.stats.dom)
 
     // 面板控制器
-    this.debug = new GUI()
+    this.gui = new GUI()
 
     // [生命周期]开启 debug
     this.camera.onDebug()
     this.composer?.onDebug()
-    this.light.onDebug()
+    this.light?.onDebug()
     this.sceneMap.forEach(item => item.onDebug())
   }
 
   public onResize = toolDebounce((): void => {
     // 获取当前屏幕尺寸
-    const { width = 0, height = 0 } =
-      this.domElement?.getBoundingClientRect() || {}
+    const { width = 0, height = 0 } = this.domElement.getBoundingClientRect()
     const ascept = width / height // 窗口宽高比
     const ratio = Math.min(window.devicePixelRatio, 3) // 设备像素比
     const s = 500 // 窗口垂直显示系数
@@ -144,7 +171,7 @@ export class World extends Emit implements LifeCycle {
 
     // [生命周期]更新 requestAnimationFrame
     this.sceneMap.forEach(item => item.onUpdate(delta))
-    this.light.onUpdate()
+    this.light?.onUpdate()
     this.camera.onUpdate()
     this.render.onUpdate()
     this.composer?.onUpdate(delta)
@@ -169,20 +196,20 @@ export class World extends Emit implements LifeCycle {
     // [生命周期]卸载调用
     this.sceneMap.forEach(item => item.onDestory())
     this.sceneMap.clear()
-    this.light.onDestory()
+    this.light?.onDestory()
     this.camera.onDestory()
     this.render.onDestory()
     this.composer?.onDestory()
 
     // 卸载 webgl 主渲染器 + css2d、css3d 辅渲染器
-    this.domElement?.removeChild(this.render.renderer.domElement)
-    this.domElement?.removeChild(this.render.cssRenderer.domElement)
+    this.domElement.removeChild(this.render.renderer.domElement)
+    this.domElement.removeChild(this.render.cssRenderer.domElement)
 
     // 卸载帧率监控器
-    this.stats && this.domElement?.removeChild(this.stats.dom)
+    this.stats && this.domElement.removeChild(this.stats.dom)
 
     // 卸载面板控制器
-    this.debug?.destroy()
+    this.gui?.destroy()
   }
 
   /**

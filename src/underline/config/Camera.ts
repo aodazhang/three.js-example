@@ -71,19 +71,19 @@ export class Camera extends Component {
       this.camera.bottom = bottom
     }
     // 更新相机投影矩阵
-    this.camera?.updateProjectionMatrix()
+    this.camera.updateProjectionMatrix()
   }
 
   override onUpdate(): void {
     // 更新相机控制器
-    this.controls?.update()
+    this.controls.update()
     // 更新相机 helper
     this.cameraHelper?.update()
   }
 
   override onDestory(): void {
     // 卸载相机控制器
-    this.controls?.dispose()
+    this.controls.dispose()
     // 卸载相机 helper
     this.cameraHelper?.dispose()
   }

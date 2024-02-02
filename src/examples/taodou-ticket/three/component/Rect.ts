@@ -10,9 +10,9 @@ import Experience from '../Experience'
 import vertexShader from '../shader/rect/vertexShader.glsl'
 import fragmentShader from '../shader/rect/fragmentShader.glsl'
 
-/** 声音 */
+/** 矩形类 */
 export default class Rect extends Component<Experience> {
-  /** 音频可视化 */
+  /** 地面 */
   private plane: Mesh = null
 
   constructor(world: Experience) {
@@ -42,7 +42,7 @@ export default class Rect extends Component<Experience> {
     // 处理地面辉光效果
     this.plane.layers.toggle(this.world.composer.bloomLayerIndex)
 
-    // 三.镜面地板
+    // 二.镜面地板
     const floor = new Mesh(
       new PlaneGeometry(width, height),
       new MeshStandardMaterial({

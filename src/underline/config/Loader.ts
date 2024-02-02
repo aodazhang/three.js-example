@@ -25,8 +25,6 @@ export class Loader extends Component {
     fbx: new Map<string, Group>(),
     file: new Map<string, string | ArrayBuffer>()
   }
-  /** 原始资源 */
-  private originalResource: Map<string, string> = new Map()
   /** 加载管理器 */
   private loadingManager: LoadingManager = null
   /** 纹理贴图加载器 */
@@ -42,9 +40,8 @@ export class Loader extends Component {
   /** 文件加载器 */
   private fileLoader: FileLoader = null
 
-  constructor(world: World, resource: Map<string, string>) {
+  constructor(world: World) {
     super(world)
-    resource && (this.originalResource = resource)
   }
 
   override onConfig(): void {
@@ -94,7 +91,7 @@ export class Loader extends Component {
     this.fileLoader.crossOrigin = 'anonymous'
 
     // 遍历资源加载
-    for (const [key, url] of this.originalResource) {
+    for (const [key, url] of this.world.options.resource) {
       const extensions = url.match(/(?!=\w+\.)\w+$/g)
       if (!isArray(extensions) || !extensions[0]) {
         continue
