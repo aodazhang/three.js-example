@@ -13,6 +13,10 @@ const router = createRouter({
       component: () => import('@/examples/index/index.vue')
     },
     {
+      path: '/template',
+      component: () => import('@/examples/template/index.vue')
+    },
+    {
       path: '/taodou-ticket',
       meta: { title: '淘豆购票' },
       component: () => import('@/examples/taodou-ticket/index.vue')

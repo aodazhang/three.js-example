@@ -112,7 +112,8 @@ export class World extends Emit implements LifeCycle {
 
     // 挂载 webgl主渲染器 + css2d、css3d 辅渲染器
     this.domElement.appendChild(this.render.renderer.domElement)
-    this.domElement.appendChild(this.render.cssRenderer.domElement)
+    this.options.useCssRenderer === true &&
+      this.domElement.appendChild(this.render.cssRenderer.domElement)
   }
 
   public onDebug(): void {
@@ -203,7 +204,8 @@ export class World extends Emit implements LifeCycle {
 
     // 卸载 webgl 主渲染器 + css2d、css3d 辅渲染器
     this.domElement.removeChild(this.render.renderer.domElement)
-    this.domElement.removeChild(this.render.cssRenderer.domElement)
+    this.options.useCssRenderer === true &&
+      this.domElement.removeChild(this.render.cssRenderer.domElement)
 
     // 卸载帧率监控器
     this.stats && this.domElement.removeChild(this.stats.dom)

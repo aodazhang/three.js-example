@@ -18,7 +18,7 @@ export class Camera extends Component {
   /** 相机控制器 */
   public controls: OrbitControls | MapControls = null
   /** [debug]相机 helper */
-  public cameraHelper: CameraHelper = null
+  private cameraHelper: CameraHelper = null
 
   constructor(world: World) {
     super(world)
@@ -33,7 +33,9 @@ export class Camera extends Component {
     // 2.相机控制器
     this.controls = new MapControls(
       this.camera,
-      this.world.render.cssRenderer.domElement
+      this.world.options.useCssRenderer === true
+        ? this.world.render.cssRenderer.domElement
+        : this.world.render.renderer.domElement
     )
     this.controls.target.set(0, 0, 0)
     this.controls.enableDamping = true // 开启运动阻尼惯性
@@ -53,7 +55,7 @@ export class Camera extends Component {
   }
 
   override onDebug(): void {
-    // 相机 helper
+    // 相机 helper：该 helper 会导致页面渲染出现黄边
     this.cameraHelper = new CameraHelper(this.camera)
     this.world.scene.add(this.cameraHelper)
   }

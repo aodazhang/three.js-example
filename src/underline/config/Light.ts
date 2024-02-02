@@ -11,9 +11,9 @@ import { Component, World } from '../base'
 /** 灯光类 */
 export class Light extends Component {
   /** 环境光 */
-  private ambient: AmbientLight = null
+  public ambient: AmbientLight = null
   /** 平行光 */
-  private directional: DirectionalLight = null
+  public directional: DirectionalLight = null
   /** [debug]平行光 helper */
   private directionalHelper: DirectionalLightHelper = null
 

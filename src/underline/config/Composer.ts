@@ -21,28 +21,25 @@ export class Composer extends Component {
   /** 效果合成器 */
   public composer: EffectComposer = null
   /** 渲染过程处理 */
-  private renderPass: RenderPass = null
+  public renderPass: RenderPass = null
   /** 描边发光效果 */
   public outlinePass: OutlinePass = null
   /** 故障效果 */
-  // private glitchPass: GlitchPass = null
+  // public glitchPass: GlitchPass = null
   /** 伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗） */
-  private shaderPass: ShaderPass = null
+  public shaderPass: ShaderPass = null
   /** SMAA 抗锯齿处理：效果优于 FXAA */
-  private smaaPass: SMAAPass = null
+  public smaaPass: SMAAPass = null
   /** 辉光图层序号 */
   public bloomLayerIndex = 1
   /** 辉光图层 */
-  private bloomLayers: Layers = null
+  public bloomLayers: Layers = null
   /** 辉光效果合成器 */
-  private bloomComposer: EffectComposer = null
+  public bloomComposer: EffectComposer = null
   /** 辉光效果 */
-  private bloomPass: UnrealBloomPass = null
+  public bloomPass: UnrealBloomPass = null
   /** 辉光材质映射 */
-  private bloomMaterialMap = new Map<
-    string,
-    THREE.Material | THREE.Material[]
-  >()
+  public bloomMaterialMap = new Map<string, THREE.Material | THREE.Material[]>()
 
   constructor(world: World) {
     super(world)

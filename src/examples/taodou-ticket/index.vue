@@ -2,7 +2,7 @@
   <div
     class="taodou-ticket"
     ref="threeRef"
-    @click="experience.notify('place', $event)"
+    @click="progress >= 100 && experience.notify('place', $event)"
   >
     <common-loading v-if="progress < 100" :progress="progress" />
   </div>
