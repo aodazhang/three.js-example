@@ -73,11 +73,9 @@ export default class TaodouTicket extends Component<Experience> {
         this.video.loop = true
         this.video.controls = false
         this.video.volume = 0.5
-        this.video.onload = () => {
-          item.material = new MeshStandardMaterial({
-            map: new VideoTexture(this.video)
-          })
-        }
+        item.material = new MeshStandardMaterial({
+          map: new VideoTexture(this.video)
+        })
       } else if (item.name.indexOf('光线') > -1) {
         material.color = new Color(0xffffff)
         // 处理光线辉光效果
