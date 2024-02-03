@@ -7,7 +7,7 @@ export default class Experience extends World {
     super({
       domElement,
       resource,
-      useDebug: false, // import.meta.env.VITE_APP_ENV === 'development',
+      useDebug: true,
       useLight: false,
       useCssRenderer: false,
       useComposer: false
