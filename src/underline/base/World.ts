@@ -165,7 +165,7 @@ export class World extends Emit implements LifeCycle {
 
   public onUpdate = (): void => {
     // 帧率监控器开始记录
-    this.stats?.begin()
+    // this.stats?.begin()
 
     // 通过时钟获取每帧渲染延迟
     const delta = this.clock.getDelta()
@@ -178,7 +178,10 @@ export class World extends Emit implements LifeCycle {
     this.composer?.onUpdate(delta)
 
     // 帧率监控器结束记录
-    this.stats?.end()
+    // this.stats?.end()
+
+    // 帧率监控器更新记录
+    this.stats?.update()
 
     // 执行下一轮绘制
     this.index = requestAnimationFrame(this.onUpdate)
@@ -221,5 +224,14 @@ export class World extends Emit implements LifeCycle {
    */
   protected addComponent(component: Component): void {
     this.sceneMap.set(component.constructor.name, component)
+  }
+
+  /**
+   * 获取场景组件
+   * @param component 组件
+   * @returns 无
+   */
+  protected getComponent(component: Component): Component {
+    return this.sceneMap.get(component.constructor.name) || null
   }
 }

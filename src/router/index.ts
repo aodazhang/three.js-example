@@ -21,6 +21,11 @@ const router = createRouter({
       meta: { title: '淘豆购票' },
       component: () => import('@/examples/taodou-ticket/index.vue')
     },
+    {
+      path: '/sky-sea',
+      meta: { title: '海天一色' },
+      component: () => import('@/examples/sky-sea/index.vue')
+    },
     { path: '/:catchAll(.*)', redirect: '/' } // 不匹配路由进入首页
   ],
   scrollBehavior(_to, _from, savedPosition) {

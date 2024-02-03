@@ -31,7 +31,7 @@ export class Render extends Component {
     // this.renderer.physicallyCorrectLights = true // 设置使用物理光照模式
     this.renderer.outputColorSpace = SRGBColorSpace // 设置输出颜色空间，解决色彩异常的问题（使用 EffectComposer 后无效）
     this.renderer.toneMapping = ACESFilmicToneMapping // 设置色调映射模式
-    this.renderer.toneMappingExposure = 1 // 设置曝光度
+    this.renderer.toneMappingExposure = 1.0 // 设置曝光度
     // this.renderer.shadowMap.enabled = true // [阴影]设置渲染器开启阴影贴图
     // this.renderer.shadowMap.type = PCFShadowMap // [阴影]设置渲染器阴影贴图类型
 
