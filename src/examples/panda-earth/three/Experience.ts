@@ -2,9 +2,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from '@/underline'
 import resource from './resource'
 import Light from './component/Light'
+import { Composer } from './component/Composer'
 import Environment from './component/Environment'
 import Earth from './component/Earth'
-import { Composer } from './component/Composer'
 
 export default class Experience extends World {
   constructor(domElement: HTMLDivElement) {
