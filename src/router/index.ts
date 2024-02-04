@@ -9,10 +9,6 @@ const router = createRouter({
   history: createWebHashHistory('/'),
   routes: [
     {
-      path: '/',
-      component: () => import('@/examples/index/index.vue')
-    },
-    {
       path: '/template',
       component: () => import('@/examples/template/index.vue')
     },
@@ -26,7 +22,12 @@ const router = createRouter({
       meta: { title: '海天一色' },
       component: () => import('@/examples/sky-sea/index.vue')
     },
-    { path: '/:catchAll(.*)', redirect: '/' } // 不匹配路由进入首页
+    {
+      path: '/panda-earth',
+      meta: { title: '熊猫地球' },
+      component: () => import('@/examples/panda-earth/index.vue')
+    },
+    { path: '/:catchAll(.*)', redirect: '/template' } // 不匹配路由进入模版页
   ],
   scrollBehavior(_to, _from, savedPosition) {
     return savedPosition ? savedPosition : { top: 0, left: 0 }

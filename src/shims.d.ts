@@ -139,6 +139,11 @@ declare module '*.glb' {
   export default src
 }
 
+declare module '*.fbx' {
+  const src: string
+  export default src
+}
+
 declare module '*.FBX' {
   const src: string
   export default src

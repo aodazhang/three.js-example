@@ -1,5 +1,5 @@
 <template>
-  <div class="template" ref="threeRef">
+  <div class="sky-sea" ref="threeRef">
     <common-loading v-if="progress < 100" :progress="progress" />
   </div>
 </template>
@@ -24,7 +24,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.template {
+.sky-sea {
   position: relative;
   width: 100vw;
   height: 100vh;

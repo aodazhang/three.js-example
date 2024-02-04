@@ -10,7 +10,8 @@ export default class Experience extends World {
     super({
       domElement,
       resource,
-      useDebug: import.meta.env.VITE_APP_ENV === 'development'
+      useDebug: import.meta.env.VITE_APP_ENV === 'development',
+      useDefaultShadowMap: false
     })
 
     this.addComponent(new Environment(this))

@@ -1,7 +1,7 @@
 import {
   ACESFilmicToneMapping,
   Color,
-  // PCFShadowMap,
+  PCFShadowMap,
   SRGBColorSpace,
   WebGLRenderer
 } from 'three'
@@ -32,11 +32,14 @@ export class Render extends Component {
     this.renderer.outputColorSpace = SRGBColorSpace // 设置输出颜色空间，解决色彩异常的问题（使用 EffectComposer 后无效）
     this.renderer.toneMapping = ACESFilmicToneMapping // 设置色调映射模式
     this.renderer.toneMappingExposure = 1.0 // 设置曝光度
-    // this.renderer.shadowMap.enabled = true // [阴影]设置渲染器开启阴影贴图
-    // this.renderer.shadowMap.type = PCFShadowMap // [阴影]设置渲染器阴影贴图类型
+    if (this.world.options.useDefaultShadowMap === true) {
+      this.renderer.shadowMap.enabled = true // [阴影]设置渲染器开启阴影贴图
+      this.renderer.shadowMap.type = PCFShadowMap // [阴影]设置渲染器阴影贴图类型
+      this.renderer.shadowMap.needsUpdate = true // [阴影]设置阴影贴图在下次 render 调用时刷新
+    }
 
     // 二.css2d、css3d 辅渲染器
-    if (this.world.options.useCssRenderer === true) {
+    if (this.world.options.useDefaultCssRenderer === true) {
       // this.cssRenderer = new CSS2DRenderer()
       this.cssRenderer = new CSS3DRenderer()
       this.cssRenderer.domElement.style.position = 'absolute'

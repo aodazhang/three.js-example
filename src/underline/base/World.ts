@@ -14,14 +14,18 @@ export interface WorldOptions {
   domElement: HTMLElement
   /** 资源文件 */
   resource?: Map<string, string>
-  /** 是否开启系统默认灯光 */
-  useLight?: boolean
-  /** 是否开启系统默认 css2d、css3d 辅渲染器 */
-  useCssRenderer?: boolean
-  /** 是否开启系统默认后期处理 */
-  useComposer?: boolean
-  /** 是否开启系统 debug 面板 */
+  /** 是否开启 debug 面板 */
   useDebug?: boolean
+  /** 是否开启系统默认灯光 */
+  useDefaultLight?: boolean
+  /** 是否开启系统默认 css2d、css3d 辅渲染器 */
+  useDefaultCssRenderer?: boolean
+  /** 是否开启系统默认后期处理 */
+  useDefaultComposer?: boolean
+  /** 是否开启系统默认阴影贴图 */
+  useDefaultShadowMap?: boolean
+  /** 是否开启系统默认摄像机控制器 */
+  useDefaultControls?: boolean
 }
 
 /** 世界类 */
@@ -30,10 +34,12 @@ export class World extends Emit implements LifeCycle {
   public options: WorldOptions = {
     domElement: null,
     resource: new Map(),
-    useLight: true,
-    useCssRenderer: true,
-    useComposer: true,
-    useDebug: false
+    useDebug: false,
+    useDefaultLight: true,
+    useDefaultCssRenderer: true,
+    useDefaultComposer: true,
+    useDefaultShadowMap: true,
+    useDefaultControls: true
   }
   /** 渲染器挂载 dom 节点 */
   public domElement: HTMLElement = null
@@ -79,8 +85,9 @@ export class World extends Emit implements LifeCycle {
     this.loader = new Loader(this)
     this.render = new Render(this)
     this.camera = new Camera(this)
-    this.options.useComposer === true && (this.composer = new Composer(this))
-    this.options.useLight === true && (this.light = new Light(this))
+    this.options.useDefaultComposer === true &&
+      (this.composer = new Composer(this))
+    this.options.useDefaultLight === true && (this.light = new Light(this))
   }
 
   public onConfig(): void {
@@ -112,7 +119,7 @@ export class World extends Emit implements LifeCycle {
 
     // 挂载 webgl主渲染器 + css2d、css3d 辅渲染器
     this.domElement.appendChild(this.render.renderer.domElement)
-    this.options.useCssRenderer === true &&
+    this.options.useDefaultCssRenderer === true &&
       this.domElement.appendChild(this.render.cssRenderer.domElement)
   }
 
@@ -207,7 +214,7 @@ export class World extends Emit implements LifeCycle {
 
     // 卸载 webgl 主渲染器 + css2d、css3d 辅渲染器
     this.domElement.removeChild(this.render.renderer.domElement)
-    this.options.useCssRenderer === true &&
+    this.options.useDefaultCssRenderer === true &&
       this.domElement.removeChild(this.render.cssRenderer.domElement)
 
     // 卸载帧率监控器

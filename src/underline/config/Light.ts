@@ -40,16 +40,23 @@ export class Light extends Component {
     this.directional.target = directionalTarget
     this.directional.position.set(30, 60, -100)
     this.world.scene.add(this.directional)
-    // [阴影]平行光阴影参数（投射阴影）：平行光阴影必须要设置 near、far、left、right、top、bottom
-    // this.directional.castShadow = true
-    // this.directional.shadow.mapSize.set(1024, 1024)
-    // this.directional.shadow.radius = 0.35
-    // this.directional.shadow.camera.near = 0
-    // this.directional.shadow.camera.far = 500
-    // this.directional.shadow.camera.top = 200
-    // this.directional.shadow.camera.bottom = -200
-    // this.directional.shadow.camera.left = -200
-    // this.directional.shadow.camera.right = 200
+    // [阴影]平行光阴影参数（投射阴影）
+    if (this.world.options.useDefaultShadowMap === true) {
+      this.directional.castShadow = true // 灯光开启阴影贴图
+      this.directional.shadow.mapSize.set(1024, 1024) // 阴影贴图分辨率：默认 512*512，越高阴影越清晰，值必须是 2 的幂
+      this.directional.shadow.radius = 0.35 // 阴影贴图模糊半径：> 1 时会模糊阴影边缘
+      /**
+       * 阴影贴图投射范围：范围外将不计算阴影贴图，可以节约系统资源（默认值很小，需要设置，相当于将平行灯作为透视相机使用）
+       * - 平行光阴影必须要设置 near、far、left、right、top、bottom
+       * - 聚光灯阴影必须要设置 near、far、fov
+       */
+      this.directional.shadow.camera.near = 0
+      this.directional.shadow.camera.far = 500
+      this.directional.shadow.camera.top = 200
+      this.directional.shadow.camera.bottom = -200
+      this.directional.shadow.camera.left = -200
+      this.directional.shadow.camera.right = 200
+    }
   }
 
   override onDebug(): void {

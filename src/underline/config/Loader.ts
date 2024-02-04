@@ -11,7 +11,7 @@ import {
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-import { isArray } from '../utils'
+import { isArray, isString } from '../utils'
 import { Component, SceneResource, World } from '../base'
 
 /** 资源加载类 */
@@ -93,10 +93,10 @@ export class Loader extends Component {
     // 遍历资源加载
     for (const [key, url] of this.world.options.resource) {
       const extensions = url.match(/(?!=\w+\.)\w+$/g)
-      if (!isArray(extensions) || !extensions[0]) {
+      if (!isArray(extensions) || !isString(extensions[0])) {
         continue
       }
-      const extension = extensions[0]
+      const extension = extensions[0].toLowerCase()
       if (
         ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(extension)
       ) {
@@ -110,7 +110,7 @@ export class Loader extends Component {
         this.audioLoader.load(url, item => this.resource.audio.set(key, item))
       } else if (['gltf', 'glb'].includes(extension)) {
         this.gltfLoader.load(url, item => this.resource.gltf.set(key, item))
-      } else if (['FBX'].includes(extension)) {
+      } else if (['fbx'].includes(extension)) {
         this.fbxLoader.load(url, item => this.resource.fbx.set(key, item))
       } else {
         this.fileLoader.load(url, item => this.resource.file.set(key, item))

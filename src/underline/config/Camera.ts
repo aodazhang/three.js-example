@@ -28,30 +28,32 @@ export class Camera extends Component {
     // 1.相机
     this.camera = new PerspectiveCamera(45, 1, 1, 1000)
     this.camera.position.set(-60, 60, 100)
-    this.camera.lookAt(new Vector3(-70, 10, 10))
+    this.camera.lookAt(new Vector3(0, 0, 0))
 
     // 2.相机控制器
-    this.controls = new MapControls(
-      this.camera,
-      this.world.options.useCssRenderer === true
-        ? this.world.render.cssRenderer.domElement
-        : this.world.render.renderer.domElement
-    )
-    this.controls.target.set(0, 0, 0)
-    this.controls.enableDamping = true // 开启运动阻尼惯性
-    this.controls.minPolarAngle = Math.PI / 10 // 最小俯视角度
-    this.controls.maxPolarAngle = Math.PI / 2.3 // 最大俯视角度
-    this.controls.minDistance = 1 // 最小距离
-    this.controls.maxDistance = 200 // 最大距离
-    this.controls.mouseButtons = {
-      LEFT: MOUSE.PAN,
-      MIDDLE: MOUSE.DOLLY,
-      RIGHT: MOUSE.ROTATE
-    } // 设置控制器鼠标操作行为
-    this.controls.touches = {
-      ONE: TOUCH.PAN,
-      TWO: null
-    } // 设置控制器触控操作行为
+    if (this.world.options.useDefaultControls === true) {
+      this.controls = new MapControls(
+        this.camera,
+        this.world.options.useDefaultCssRenderer === true
+          ? this.world.render.cssRenderer.domElement
+          : this.world.render.renderer.domElement
+      )
+      this.controls.target.set(0, 0, 0)
+      this.controls.enableDamping = true // 开启运动阻尼惯性
+      this.controls.minPolarAngle = Math.PI / 10 // 最小俯视角度
+      this.controls.maxPolarAngle = Math.PI / 2.3 // 最大俯视角度
+      this.controls.minDistance = 1 // 最小距离
+      this.controls.maxDistance = 200 // 最大距离
+      this.controls.mouseButtons = {
+        LEFT: MOUSE.PAN,
+        MIDDLE: MOUSE.DOLLY,
+        RIGHT: MOUSE.ROTATE
+      } // 设置控制器鼠标操作行为
+      this.controls.touches = {
+        ONE: TOUCH.PAN,
+        TWO: null
+      } // 设置控制器触控操作行为
+    }
   }
 
   override onDebug(): void {
@@ -78,14 +80,14 @@ export class Camera extends Component {
 
   override onUpdate(): void {
     // 更新相机控制器
-    this.controls.update()
+    this.controls?.update()
     // 更新相机 helper
     this.cameraHelper?.update()
   }
 
   override onDestory(): void {
     // 卸载相机控制器
-    this.controls.dispose()
+    this.controls?.dispose()
     // 卸载相机 helper
     this.cameraHelper?.dispose()
   }
@@ -100,6 +102,7 @@ export class Camera extends Component {
     if (
       !(position instanceof Vector3) ||
       !(target instanceof Vector3) ||
+      !this.controls ||
       !this.controls.enabled
     ) {
       return

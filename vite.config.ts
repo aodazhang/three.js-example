@@ -33,7 +33,15 @@ export default defineConfig({
     }
   },
   // 4.忽略解析的静态资源格式：https://cn.vitejs.dev/config/shared-options.html#assetsinclude
-  assetsInclude: ['**/*.hdr', '**/*.gltf', '**/*.glb', '**/*.FBX'],
+  assetsInclude: [
+    '**/*.hdr',
+    '**/*.gltf',
+    '**/*.glb',
+    '**/*.fbx',
+    '**/*.JPEG',
+    '**/*.PNG',
+    '**/*.GIF'
+  ],
   // 5.插件
   plugins: [
     /**

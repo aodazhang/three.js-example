@@ -8,9 +8,10 @@ export default class Experience extends World {
       domElement,
       resource,
       useDebug: import.meta.env.VITE_APP_ENV === 'development',
-      useLight: false,
-      useCssRenderer: false,
-      useComposer: false
+      useDefaultLight: false,
+      useDefaultCssRenderer: false,
+      useDefaultComposer: false,
+      useDefaultShadowMap: false
     })
 
     this.addComponent(new Environment(this))
