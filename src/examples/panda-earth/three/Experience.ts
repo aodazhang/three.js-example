@@ -31,7 +31,7 @@ export default class Experience extends World {
     // 2.覆盖默认的相机控制器
     this.camera.controls = new OrbitControls(
       this.camera.camera,
-      this.render.cssRenderer.domElement
+      this.render.renderer.domElement
     )
     this.camera.controls.target.set(0, 0, 0)
     this.camera.controls.enableDamping = true

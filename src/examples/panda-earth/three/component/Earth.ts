@@ -1,5 +1,6 @@
 import {
   Box3,
+  Box3Helper,
   Group,
   Mesh,
   MeshBasicMaterial,
@@ -20,16 +21,15 @@ export default class Earth extends Component<Experience> {
   private diqiu: Group = null
   /** 地球（检测对象） */
   private diqiuSphere: Mesh = null
+  /** 地球（检测盒） */
+  private box: Box3 = null
+  /** 地球（检测盒辅助对象） */
+  private boxHelper: Box3Helper = null
   /** 标记 */
   private mark: Group = new Group()
 
   constructor(world: Experience) {
     super(world)
-  }
-
-  override onConfig(): void {
-    // [通信]订阅选择
-    this.world.on('select', this.onClickSelect)
   }
 
   override onReady(resource?: SceneResource): void {
@@ -41,12 +41,12 @@ export default class Earth extends Component<Experience> {
 
     // 二.地球（检测对象）
     // 1.创建一个包裹盒对象
-    const box = new Box3()
+    this.box = new Box3()
     // 2.根据指定对象设置包裹盒的大小
-    box.setFromObject(this.diqiu)
+    this.box.setFromObject(this.diqiu)
     const size = new Vector3()
     // 3.通过包裹盒大小获取指定对象尺寸
-    box.getSize(size)
+    this.box.getSize(size)
     // 4.构建检测对象
     this.diqiuSphere = new Mesh(
       // 球体半径 = 检测盒宽度 / 2，这里可以通过调整球体半径控制检测范围
@@ -58,9 +58,11 @@ export default class Earth extends Component<Experience> {
     // 三.标记
     data.forEach(item => {
       const img = document.createElement('img')
-      img.className = 'mark'
-      item.country.includes('研究中心') && img.classList.add('mark-l')
+      img.className = item.country.includes('研究中心') ? 'mark mark-l' : 'mark'
       img.src = this.world.options.resource.get(item.mark)
+      img.onclick = () => {
+        window.open(item.link, '_blank')
+      }
       /**
        * CSS3DObject：物体固定角度
        * CSS3DSprite：物体始终面朝相机
@@ -69,13 +71,18 @@ export default class Earth extends Component<Experience> {
       cssObject.position.copy(item.vector)
       cssObject.position.add(new Vector3(0.05, 0.3, 0))
       cssObject.scale.set(0.015, 0.015, 0.015)
-      cssObject.name = item.country
       this.mark.add(cssObject)
     })
     this.world.scene.add(this.mark)
   }
 
-  override onUpdate(_delta?: number): void {
+  override onDebug(): void {
+    // box3 helper
+    this.boxHelper = new Box3Helper(this.box, 0xff0000)
+    this.world.scene.add(this.boxHelper)
+  }
+
+  override onUpdate(): void {
     // 遍历标记检测是否被地球遮挡
     this.mark.traverse(item => {
       item.visible = !this.detectObjectObstructed(
@@ -87,22 +94,8 @@ export default class Earth extends Component<Experience> {
   }
 
   override onDestory(): void {
-    // [通信]取消订阅选择
-    this.world.off('select', this.onClickSelect)
-  }
-
-  /**
-   * 选择国家
-   * @param e 鼠标触控事件
-   * @returns 无
-   */
-  private onClickSelect = (e: MouseEvent): void => {
-    const coord = this.normalization(e)
-    const intersect = this.raycasterIntersection(coord, this.mark)
-    if (!(intersect?.object instanceof Mesh)) {
-      return
-    }
-    alert(`选择了【${intersect.object.name}】`)
+    // 卸载 box3 helper
+    this.boxHelper?.dispose()
   }
 
   /**

@@ -53,14 +53,14 @@ export class Composer extends Component {
     )
     this.composer.addPass(shaderPass)
 
-    // 7.SMAA 抗锯齿处理：效果优于 FXAA
+    // 5.SMAA 抗锯齿处理：效果优于 FXAA
     this.smaaPass = new SMAAPass(100, 100)
     this.composer.addPass(this.smaaPass)
   }
 
   override onDebug(): void {
     // 面板控制器
-    const folder = this.world.gui.addFolder('合成效果')
+    const folder = this.world.gui.addFolder('合成器')
     folder
       .add(this.uniforms.uBrightness, 'value')
       .name('亮度')

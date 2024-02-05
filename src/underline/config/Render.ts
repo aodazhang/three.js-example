@@ -48,8 +48,8 @@ export class Render extends Component {
       this.cssRenderer.domElement.style.bottom = '0px'
       this.cssRenderer.domElement.style.left = '0px'
       this.cssRenderer.domElement.style.right = '0px'
-      this.cssRenderer.domElement.style.touchAction = 'none'
-      // this.cssRenderer.domElement.style.pointerEvents = 'none'
+      this.cssRenderer.domElement.style.touchAction = 'none' // cssRenderer 不响应用户手势
+      this.cssRenderer.domElement.style.pointerEvents = 'none' // cssRenderer 渲染 dom 节点不响应鼠标操作，事件可以穿透到 renderer 渲染 dom 节点
     }
   }
 

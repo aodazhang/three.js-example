@@ -23,23 +23,22 @@ export class Component<T extends World = World> implements LifeCycle {
     this.world = world || null
   }
 
-  /* eslint-disable-next-line */
+  /* eslint-disable */
   public onConfig(): void {}
 
-  /* eslint-disable-next-line */
-  public onReady(_resource?: SceneResource): void {}
+  // @ts-ignore
+  public onReady(resource?: SceneResource): void {}
 
-  /* eslint-disable-next-line */
   public onDebug(): void {}
 
-  /* eslint-disable-next-line */
-  public onResize(_size?: DomElementSize): void {}
+  // @ts-ignore
+  public onResize(size?: DomElementSize): void {}
 
-  /* eslint-disable-next-line */
-  public onUpdate(_delta?: number): void {}
+  // @ts-ignore
+  public onUpdate(delta?: number): void {}
 
-  /* eslint-disable-next-line */
   public onDestory(): void {}
+  /* eslint-enable */
 
   /**
    * 点击坐标归一化为设备坐标

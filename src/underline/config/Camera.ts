@@ -34,9 +34,7 @@ export class Camera extends Component {
     if (this.world.options.useDefaultControls === true) {
       this.controls = new MapControls(
         this.camera,
-        this.world.options.useDefaultCssRenderer === true
-          ? this.world.render.cssRenderer.domElement
-          : this.world.render.renderer.domElement
+        this.world.render.renderer.domElement
       )
       this.controls.target.set(0, 0, 0)
       this.controls.enableDamping = true // 开启运动阻尼惯性

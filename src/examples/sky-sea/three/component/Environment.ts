@@ -94,8 +94,6 @@ export default class Environment extends Component<Experience> {
     this.water.rotation.set(-Math.PI / 2, 0, 0)
     this.world.scene.add(this.water)
 
-    console.log(this.water.material.uniforms)
-
     // 三.天空
     this.sky = new Sky()
     this.sky.scale.setScalar(10000) // 天空放大倍数与海平面保持一致
@@ -234,7 +232,7 @@ export default class Environment extends Component<Experience> {
       })
   }
 
-  override onUpdate(_delta?: number): void {
+  override onUpdate(): void {
     // 更新水面波纹偏移
     // this.water.material.uniforms.time.value = this.world.clock.getElapsedTime()
     this.water.material.uniforms.time.value += this.params.speed / 60
