@@ -1,11 +1,16 @@
 precision mediump float;
 
-uniform sampler2D uDiffuse;
+uniform sampler2D uDiffuse;// 渲染纹理
 uniform float uBrightness;// 亮度
 uniform float uContrast;// 对比度
 uniform float uSaturation;// 饱和度
 varying vec2 vUv;
 
+/**
+* 亮度矩阵
+* @param brightness 亮度，范围 0.0~1.0
+* @returns 亮度矩阵
+*/
 mat4 brightnessMatrix(float brightness){
   return mat4(
     1,0,0,0,
@@ -15,6 +20,11 @@ mat4 brightnessMatrix(float brightness){
   );
 }
 
+/**
+* 对比度矩阵
+* @param contrast 对比度，设置为 1.5 时对比度增加 50%
+* @returns 对比度矩阵
+*/
 mat4 contrastMatrix(float contrast){
   float t=(1.-contrast)/2.;
   return mat4(
@@ -25,6 +35,11 @@ mat4 contrastMatrix(float contrast){
   );
 }
 
+/**
+* 饱和度矩阵
+* @param saturation 饱和度
+* @returns 饱和度矩阵
+*/
 mat4 saturationMatrix(float saturation){
   vec3 luminance=vec3(.3086,.6094,.0820);
   
@@ -48,6 +63,8 @@ mat4 saturationMatrix(float saturation){
 }
 
 void main(){
-  vec4 color=texture2D(uDiffuse,vUv);// 获取纹理颜色
+  // 获取纹理颜色
+  vec4 color=texture2D(uDiffuse,vUv);
+  // 最终输出颜色向量 = 亮度矩阵 x 对比度矩阵 x 饱和度矩阵 x 颜色向量
   gl_FragColor=brightnessMatrix(uBrightness)*contrastMatrix(uContrast)*saturationMatrix(uSaturation)*color;
 }
