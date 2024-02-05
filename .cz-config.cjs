@@ -19,7 +19,12 @@ module.exports = {
     { value: 'docs', name: 'docs:         文档变更' }
   ],
   // 2.提交影响范围 scope
-  scopes: [{ name: 'examples' }, { name: 'underline' }, { name: 'all' }],
+  scopes: [
+    { name: 'examples' },
+    { name: 'underline' },
+    { name: 'shader' },
+    { name: 'all' }
+  ],
   // 3.交互式问答信息
   messages: {
     type: '请选择一种提交类型:',
