@@ -1,24 +1,19 @@
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
-import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
+import { ShaderMaterial } from 'three'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
-import { Component, DomElementSize } from '@/underline'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
+import { BaseComposer, DomElementSize } from '@/underline'
 import Experience from '../Experience'
 import vertexShader from '../shader/Colorful/vertexShader.glsl'
 import fragmentShader from '../shader/Colorful/fragmentShader.glsl'
-import { ShaderMaterial } from 'three'
 
-/** 后期处理 */
-export class Composer extends Component {
-  /** 效果合成器 */
-  public composer: EffectComposer = null
-  /** 渲染过程处理 */
-  public renderPass: RenderPass = null
+/** 合成器 */
+export default class Composer extends BaseComposer<Experience> {
   /** 伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗） */
   public shaderPass: ShaderPass = null
   /** SMAA 抗锯齿处理：效果优于 FXAA */
   public smaaPass: SMAAPass = null
+  /** shader 全局变量 */
   public readonly uniforms: { [key: string]: { value: unknown } } = {
     uDiffuse: { value: null },
     uBrightness: { value: 0.0 },
@@ -31,18 +26,13 @@ export class Composer extends Component {
   }
 
   override onConfig(): void {
-    // 1.效果合成器
-    this.composer = new EffectComposer(this.world.render.renderer)
+    super.onConfig()
 
-    // 2.渲染过程处理
-    this.renderPass = new RenderPass(this.world.scene, this.world.camera.camera)
-    this.composer.addPass(this.renderPass) // 渲染过程需要最先被添加
-
-    // 3.伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗）
+    // 1.伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗）
     this.shaderPass = new ShaderPass(GammaCorrectionShader)
     this.composer.addPass(this.shaderPass)
 
-    // 4.颜色处理
+    // 2.颜色处理
     const shaderPass = new ShaderPass(
       new ShaderMaterial({
         uniforms: this.uniforms,
@@ -53,7 +43,7 @@ export class Composer extends Component {
     )
     this.composer.addPass(shaderPass)
 
-    // 5.SMAA 抗锯齿处理：效果优于 FXAA
+    // 3.SMAA 抗锯齿处理：效果优于 FXAA
     this.smaaPass = new SMAAPass(100, 100)
     this.composer.addPass(this.smaaPass)
   }
@@ -82,23 +72,10 @@ export class Composer extends Component {
   }
 
   override onResize(size: DomElementSize): void {
-    const { width, height, ratio } = size
+    const { width, height } = size
     // 更新效果合成器像素比、尺寸
-    this.composer.setPixelRatio(ratio)
-    this.composer.setSize(width, height)
+    super.onResize(size)
     // 更新 SMAA 抗锯齿处理尺寸
     this.smaaPass.setSize(width, height)
-  }
-
-  override onUpdate(delta: number): void {
-    // 更新效果合成器
-    this.composer.render(delta)
-  }
-
-  override onDestory(): void {
-    // 卸载效果合成器
-    this.composer.dispose()
-    this.composer.renderTarget1.dispose()
-    this.composer.renderTarget2.dispose()
   }
 }

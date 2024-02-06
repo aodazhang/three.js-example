@@ -7,21 +7,17 @@ import {
   Vector2
 } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
-import { Component, DomElementSize, World } from '../base'
+import { BaseComposer, DomElementSize } from '@/underline'
+import Experience from '../Experience'
 
-/** 后期处理类 */
-export class Composer extends Component {
-  /** 效果合成器 */
-  public composer: EffectComposer = null
-  /** 渲染过程处理 */
-  public renderPass: RenderPass = null
+/** 合成器 */
+export default class Composer extends BaseComposer<Experience> {
   /** 描边发光效果 */
   public outlinePass: OutlinePass = null
   /** 故障效果 */
@@ -41,19 +37,14 @@ export class Composer extends Component {
   /** 辉光材质映射 */
   public bloomMaterialMap = new Map<string, THREE.Material | THREE.Material[]>()
 
-  constructor(world: World) {
+  constructor(world: Experience) {
     super(world)
   }
 
   override onConfig(): void {
-    // 1.效果合成器
-    this.composer = new EffectComposer(this.world.render.renderer)
+    super.onConfig()
 
-    // 2.渲染过程处理
-    this.renderPass = new RenderPass(this.world.scene, this.world.camera.camera)
-    this.composer.addPass(this.renderPass) // 渲染过程需要最先被添加
-
-    // 3.描边发光效果
+    // 1.描边发光效果
     this.outlinePass = new OutlinePass(
       new Vector2(),
       this.world.scene,
@@ -69,15 +60,15 @@ export class Composer extends Component {
     this.outlinePass.edgeThickness = 10 // 边框宽度
     this.composer.addPass(this.outlinePass)
 
-    // 4.故障效果
+    // 2.故障效果
     // this.glitchPass = new GlitchPass()
     // this.composer.addPass(this.glitchPass)
 
-    // 5.伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗）
+    // 3.伽马校正处理：对应 renderer.outputColorSpace，用于解决使用 EffectComposer 后颜色异常的 bug（例如变暗）
     this.shaderPass = new ShaderPass(GammaCorrectionShader)
     this.composer.addPass(this.shaderPass)
 
-    // 6.辉光效果
+    // 4.辉光效果
     // 辉光图层
     this.bloomLayers = new Layers()
     this.bloomLayers.set(this.bloomLayerIndex) // 定义辉光图层所属位置
@@ -100,9 +91,9 @@ export class Composer extends Component {
         vertexShader: `
           varying vec2 vUv;
 
-          void main(){
-            vUv = uv;
+          void main() {
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+            vUv = uv;
           }
         `,
         fragmentShader: `
@@ -122,7 +113,7 @@ export class Composer extends Component {
     mixPass.needsSwap = true
     this.composer.addPass(mixPass)
 
-    // 7.SMAA 抗锯齿处理：效果优于 FXAA
+    // 5.SMAA 抗锯齿处理：效果优于 FXAA
     this.smaaPass = new SMAAPass(100, 100)
     this.composer.addPass(this.smaaPass)
   }
@@ -130,8 +121,7 @@ export class Composer extends Component {
   override onResize(size: DomElementSize): void {
     const { width, height, ratio } = size
     // 更新效果合成器像素比、尺寸
-    this.composer.setPixelRatio(ratio)
-    this.composer.setSize(width, height)
+    super.onResize(size)
     // 更新辉光效果合成器像素比、尺寸
     this.bloomComposer.setPixelRatio(ratio)
     this.bloomComposer.setSize(width, height)
@@ -145,19 +135,20 @@ export class Composer extends Component {
 
   override onDebug(): void {
     // 面板控制器
-    this.world.gui
+    const folder = this.world.gui.addFolder('合成器')
+    folder
       .add(this.bloomPass, 'strength')
       .name('辉光 strength')
       .min(0)
       .max(2)
       .step(0.01)
-    this.world.gui
+    folder
       .add(this.bloomPass, 'radius')
       .name('辉光 radius')
       .min(0)
       .max(1)
       .step(0.01)
-    this.world.gui
+    folder
       .add(this.bloomPass, 'threshold')
       .name('辉光 threshold')
       .min(0)
@@ -189,14 +180,12 @@ export class Composer extends Component {
       }
     })
     // 更新效果合成器
-    this.composer.render(delta)
+    super.onUpdate(delta)
   }
 
   override onDestory(): void {
     // 卸载效果合成器
-    this.composer.dispose()
-    this.composer.renderTarget1.dispose()
-    this.composer.renderTarget2.dispose()
+    super.onDestory()
     // 卸载辉光效果合成器
     this.bloomComposer.dispose()
     this.bloomComposer.renderTarget1.dispose()

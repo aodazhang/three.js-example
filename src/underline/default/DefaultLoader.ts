@@ -12,10 +12,11 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { isArray, isString } from '../utils'
-import { Component, SceneResource, World } from '../base'
+import { ComponentType, SceneResource } from '../type'
+import { Component, World } from '../base'
 
-/** 资源加载类 */
-export class Loader extends Component {
+/** 资源加载 */
+export class DefaultLoader extends Component {
   /** 加载资源 */
   public readonly resource: SceneResource = {
     texture: new Map<string, Texture>(),
@@ -41,7 +42,7 @@ export class Loader extends Component {
   private fileLoader: FileLoader = null
 
   constructor(world: World) {
-    super(world)
+    super(world, ComponentType.LOADER)
   }
 
   override onConfig(): void {

@@ -1,5 +1,5 @@
 /**
- * @description three.js 资源
+ * @description 资源
  */
 import { isArray } from './utils'
 

@@ -7,7 +7,7 @@ varying vec2 vUv;
 
 vec3 distort(vec3 p){
   float noise=cnoise(p+iTime);
-  p+=noise*normal*.2*uDistort;
+  p+=noise*normal*uDistort;
   return p;
 }
 

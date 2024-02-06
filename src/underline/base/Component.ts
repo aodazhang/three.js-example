@@ -1,5 +1,5 @@
 /**
- * @description 场景组件
+ * @description 组件
  */
 import {
   Audio,
@@ -12,15 +12,21 @@ import {
   Vector2
 } from 'three'
 import { isArray } from '../utils'
-import { DomElementSize, LifeCycle, SceneResource, World } from '.'
+import { ComponentType } from '../type'
+import { BaseCamera } from './BaseCamera'
+import { LifeCycle } from './LifeCycle'
+import { World } from './World'
 
 /** 组件类 */
 export class Component<T extends World = World> implements LifeCycle {
   /** 世界实例 */
   protected readonly world: T = null
+  /** 组件类型 */
+  public readonly type: ComponentType = null
 
-  constructor(world?: T) {
-    this.world = world || null
+  constructor(world: T, type?: ComponentType) {
+    this.world = world
+    this.type = type ?? ComponentType.NORMAL
   }
 
   /* eslint-disable */
@@ -48,7 +54,7 @@ export class Component<T extends World = World> implements LifeCycle {
    * @returns 设备坐标
    */
   protected normalization(e: MouseEvent): Vector2 {
-    const { width, height } = this.world?.domElementSize || {}
+    const { width, height } = this.world.domElementSize || {}
     return new Vector2(
       (e.offsetX / width) * 2 - 1,
       -(e.offsetY / height) * 2 + 1
@@ -65,10 +71,11 @@ export class Component<T extends World = World> implements LifeCycle {
     coord: Vector2,
     objects: Object3D | Object3D[]
   ): Intersection<Object3D> {
+    const camera = this.world.getComponent<BaseCamera>(ComponentType.CAMERA)
     // 1.实例化射线
     const raycaster = new Raycaster()
     // 2.通过 设备坐标 + 场景相机 更新射线
-    raycaster.setFromCamera(coord, this.world?.camera.camera)
+    raycaster.setFromCamera(coord, camera?.camera)
     // 3.计算物体和射线的焦点
     const intersects = raycaster.intersectObjects(
       isArray(objects) ? objects : [objects],
@@ -102,10 +109,11 @@ export class Component<T extends World = World> implements LifeCycle {
    * @returns 位置音频实例
    */
   protected createPositionAudio(isAnalyser?: boolean) {
+    const camera = this.world.getComponent<BaseCamera>(ComponentType.CAMERA)
     // 1.创建音频监听器
     const listener = new AudioListener()
     // 2.摄像机绑定音频监听器
-    this.world?.camera.camera.add(listener)
+    camera.camera.add(listener)
     // 3.创建位置音频对象，绑定音频监听器
     const positionalAudio = new PositionalAudio(listener)
     // 4.根据音频对象创建分析器

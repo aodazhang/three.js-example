@@ -1,10 +1,8 @@
 /**
- * @description 场景通信
+ * @description 通信
  */
 import { isArray, isFunction } from '../utils'
-
-/** 通信 callback */
-export type EmitCallBack<T = unknown> = (message?: T) => unknown
+import { EmitCallBack } from '../type'
 
 /** 通信类 */
 export class Emit {

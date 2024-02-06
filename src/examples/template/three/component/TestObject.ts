@@ -11,7 +11,7 @@ export default class TestObject extends Component<Experience> {
   /** shader uniforms */
   private readonly uniforms = {
     iTime: { value: 0 },
-    uDistort: { value: 5 }
+    uDistort: { value: 0.5 }
   }
 
   constructor(world: Experience) {
@@ -38,8 +38,8 @@ export default class TestObject extends Component<Experience> {
       .add(this.uniforms.uDistort, 'value')
       .name('噪波强度')
       .min(0)
-      .max(20)
-      .step(1)
+      .max(3)
+      .step(0.1)
   }
 
   override onUpdate(_delta?: number): void {

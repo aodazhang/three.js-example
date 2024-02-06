@@ -105,10 +105,10 @@ export default class Environment extends Component<Experience> {
 
     // 四.测试多面体
     this.cube = new Mesh(
-      new IcosahedronGeometry(20, 0),
+      new IcosahedronGeometry(10, 0),
       new MeshStandardMaterial({ color: new Color(0xffffff), roughness: 0 })
     )
-    this.cube.position.set(0, 10, 0)
+    this.cube.position.set(0, 5, 0)
     this.world.scene.add(this.cube)
     // 测试动画效果
     gsap.to(this.cube.position, {
@@ -116,7 +116,7 @@ export default class Environment extends Component<Experience> {
       ease: 'power2.in',
       repeat: -1,
       yoyo: true,
-      y: 30
+      y: 15
     })
     gsap.to(this.cube.rotation, {
       duration: 3,

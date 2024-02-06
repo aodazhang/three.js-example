@@ -1,9 +1,11 @@
 /**
- * @description three.js 辅助工具类：underline
+ * @description three.js 辅助工具
  */
-import { Component, DomElementSize, SceneResource, World } from './base'
+import { BaseCamera, BaseComposer, BaseLight, Component, World } from './base'
+import { ComponentType, DomElementSize, SceneResource } from './type'
 
+export * from './default'
 export * from './utils'
 
-export { Component, World }
+export { BaseCamera, BaseComposer, BaseLight, Component, ComponentType, World }
 export type { DomElementSize, SceneResource }

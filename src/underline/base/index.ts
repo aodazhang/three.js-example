@@ -1,3 +1,6 @@
+export * from './BaseCamera'
+export * from './BaseComposer'
+export * from './BaseLight'
 export * from './Component'
 export * from './Emit'
 export * from './LifeCycle'
