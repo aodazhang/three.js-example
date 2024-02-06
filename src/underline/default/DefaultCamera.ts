@@ -1,13 +1,21 @@
-import { AxesHelper, CameraHelper, PerspectiveCamera, Vector3 } from 'three'
+import {
+  AxesHelper,
+  CameraHelper,
+  GridHelper,
+  PerspectiveCamera,
+  Vector3
+} from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { BaseCamera, World } from '../base'
 
-/** 相机类 */
+/** 默认相机 */
 export class DefaultCamera extends BaseCamera {
   /** [debug]相机 helper */
-  private cameraHelper: CameraHelper = null
+  public cameraHelper: CameraHelper = null
   /** [debug]坐标轴 helper */
-  private axesHelper: AxesHelper = null
+  public axesHelper: AxesHelper = null
+  /** [debug]网格 helper */
+  public gridHelper: GridHelper = null
 
   constructor(world: World) {
     super(world)
@@ -37,9 +45,12 @@ export class DefaultCamera extends BaseCamera {
     // 坐标轴 helper
     this.axesHelper = new AxesHelper(100)
     this.world.scene.add(this.axesHelper)
+    // 网格 helper
+    this.gridHelper = new GridHelper(200, 200)
+    this.world.scene.add(this.gridHelper)
   }
 
-  override onUpdate(): void {
+  override onUpdate(_delta?: number): void {
     // 更新相机控制器
     super.onUpdate()
     // 更新相机 helper
@@ -53,5 +64,7 @@ export class DefaultCamera extends BaseCamera {
     this.cameraHelper?.dispose()
     // 卸载坐标轴 helper
     this.axesHelper?.dispose()
+    // 卸载网格 helper
+    this.gridHelper?.dispose()
   }
 }

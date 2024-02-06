@@ -10,7 +10,7 @@ import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import { ComponentType, DomElementSize } from '../type'
 import { BaseCamera, BaseComposer, Component, World } from '../base'
 
-/** 渲染器 */
+/** 默认渲染器 */
 export class DefaultRender extends Component {
   /** webgl 主渲染器 */
   public renderer: WebGLRenderer = null

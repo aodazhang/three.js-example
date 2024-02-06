@@ -15,7 +15,7 @@ import { isArray, isString } from '../utils'
 import { ComponentType, SceneResource } from '../type'
 import { Component, World } from '../base'
 
-/** 资源加载 */
+/** 默认资源加载器 */
 export class DefaultLoader extends Component {
   /** 加载资源 */
   public readonly resource: SceneResource = {
