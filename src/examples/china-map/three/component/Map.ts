@@ -1,12 +1,13 @@
 import {
-  BufferAttribute,
   BufferGeometry,
   ExtrudeGeometry,
-  Line,
   LineBasicMaterial,
+  LineLoop,
   Mesh,
   MeshStandardMaterial,
-  Shape
+  PlaneGeometry,
+  Shape,
+  Vector3
 } from 'three'
 import { geoMercator } from 'd3-geo'
 import { Component, SceneResource, randomRgb } from '@/underline'
@@ -52,11 +53,17 @@ export default class Map extends Component<Experience> {
         // 单面
         coordinates.forEach(coords => {
           const shape = new Shape()
-          const vertices: number[] = []
+          //  A.BufferGeometry 顶点数据
+          const vertices1: number[] = [] // 数组方式
+          const vertices2: Vector3[] = [] // Vector3 方式
+
           coords.forEach((longlat, index) => {
             const [x, y] = projection(longlat as [number, number])
             index ? shape.lineTo(x, y) : shape.moveTo(x, y)
-            vertices.push(x, y, -4.01)
+
+            // B.BufferGeometry 添加顶点数据
+            vertices1.push(x, y, -4.01)
+            vertices2.push(new Vector3(x, y, -4.01))
           })
           const mesh = new Mesh(
             new ExtrudeGeometry(shape, { depth: 1, bevelEnabled: false }),
@@ -65,12 +72,26 @@ export default class Map extends Component<Experience> {
           mesh.position.y = 1
           mesh.rotation.x = Math.PI / 2
           this.world.scene.add(mesh)
+
+          // C.BufferGeometry 设置顶点数据
           const geometry = new BufferGeometry()
-          geometry.setAttribute(
-            'position',
-            new BufferAttribute(new Float32Array(vertices), 3)
-          )
-          const line = new Line(
+          // geometry.setAttribute(
+          //   'position',
+          //   new BufferAttribute(new Float32Array(vertices1), 3)
+          // ) // 数组方式添加
+          geometry.setFromPoints(vertices2) // Vector3 方式添加
+
+          /**
+           * D.线、点
+           * - Line：非闭合线
+           * - LineLoop：闭合线
+           * - LineSegments：类似 Line
+           */
+          // const line = new Line(
+          //   geometry,
+          //   new LineBasicMaterial({ color: 0xff0000 })
+          // )
+          const line = new LineLoop(
             geometry,
             new LineBasicMaterial({ color: 0xff0000 })
           )
@@ -79,5 +100,39 @@ export default class Map extends Component<Experience> {
         })
       }
     })
+
+    /**
+     * 多类型绘制
+     * - Points -> PointsMaterial
+     * - Line、LineLoop、LineSegments（Line 和 LineSegments 类似） -> LineBasicMaterial
+     * - Mesh -> MeshStandardMaterial
+     */
+    // 顶点数据
+    const geometry = new PlaneGeometry(10, 10, 1, 1)
+
+    // 点绘制
+    // const obj = new Points(geometry, new PointsMaterial({ color: 0xff0000 }))
+
+    // 线绘制
+    // const obj = new LineLoop(
+    // geometry,
+    // new LineBasicMaterial({ color: 0xff0000 })
+    // new LineDashedMaterial({
+    //   color: 0xff0000,
+    //   linewidth: 10,
+    //   scale: 1,
+    //   dashSize: 3,
+    //   gapSize: 1
+    // })
+    // )
+
+    // 面绘制
+    const obj = new Mesh(
+      geometry,
+      new MeshStandardMaterial({ color: 0xff0000 })
+    )
+
+    obj.position.set(0, 20, 0)
+    this.world.scene.add(obj)
   }
 }
