@@ -1,4 +1,4 @@
-import { SceneResource, World } from '@/underline'
+import { World } from '@/underline'
 import resource from './resource'
 import Environment from './component/Environment'
 import TestObject from './component/TestObject'
@@ -13,11 +13,5 @@ export default class Experience extends World {
 
     this.addComponent(new Environment(this))
     this.addComponent(new TestObject(this))
-
-    this.onConfig()
-  }
-
-  override onReady(resource?: SceneResource): void {
-    super.onReady(resource)
   }
 }

@@ -16,6 +16,7 @@ const progress = ref(0)
 onMounted(() => {
   experience = new Experience(threeRef.value)
   experience.on<number>('progress', message => (progress.value = message))
+  experience.onConfig()
 })
 
 onUnmounted(() => {

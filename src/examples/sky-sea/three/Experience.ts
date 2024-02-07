@@ -10,12 +10,9 @@ export default class Experience extends World {
       useDebug: import.meta.env.VITE_APP_ENV === 'development'
     })
 
-    this.addComponent(new Environment(this))
-
     // 关闭默认灯光
     this.removeComponent(this.getComponent(ComponentType.LIGHT))
-
-    this.onConfig()
+    this.addComponent(new Environment(this))
   }
 
   override onDebug(): void {

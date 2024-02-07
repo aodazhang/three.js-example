@@ -48,19 +48,19 @@ export default class Light extends BaseLight<Experience> {
     const folder = this.world.gui.addFolder('灯光')
     folder
       .add(this.directional.position, 'x')
-      .name('平行光 x')
+      .name('平行光位置 x')
       .min(-500)
       .max(500)
       .step(1)
     folder
       .add(this.directional.position, 'y')
-      .name('平行光 y')
+      .name('平行光位置 y')
       .min(-500)
       .max(500)
       .step(1)
     folder
       .add(this.directional.position, 'z')
-      .name('平行光 z')
+      .name('平行光位置 z')
       .min(-500)
       .max(500)
       .step(1)

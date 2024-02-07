@@ -25,6 +25,7 @@ onMounted(() => {
   experience
     .on<number>('progress', message => (progress.value = message))
     .on<number>('select', message => alert(`选择座位序号：${message}`))
+  experience.onConfig()
 })
 
 onUnmounted(() => {

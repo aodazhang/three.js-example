@@ -27,6 +27,11 @@ const router = createRouter({
       meta: { title: '熊猫地球' },
       component: () => import('@/examples/panda-earth/index.vue')
     },
+    {
+      path: '/china-map',
+      meta: { title: '中国地图' },
+      component: () => import('@/examples/china-map/index.vue')
+    },
     { path: '/:catchAll(.*)', redirect: '/template' } // 不匹配路由进入模版页
   ],
   scrollBehavior(_to, _from, savedPosition) {

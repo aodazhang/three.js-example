@@ -26,8 +26,10 @@ export default class Experience extends World {
     this.addComponent(this.composer)
     this.addComponent(new Environment(this))
     this.addComponent(new Earth(this))
+  }
 
-    this.onConfig()
+  override onConfig(): void {
+    super.onConfig()
 
     // 默认相机调整
     this.camera.camera.position.set(0, 0, 20)

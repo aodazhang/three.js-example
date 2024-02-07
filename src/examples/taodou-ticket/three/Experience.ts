@@ -32,8 +32,6 @@ export default class Experience extends World {
     this.addComponent(new Label(this))
     this.addComponent(new Rect(this))
     this.addComponent(new TaodouTicket(this))
-
-    this.onConfig()
   }
 
   override onReady(resource?: SceneResource): void {

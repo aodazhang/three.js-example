@@ -46,6 +46,15 @@ export class DefaultLoader extends Component {
   }
 
   override onConfig(): void {
+    // 如果不存在资源，则直接认定加载成功
+    if (!this.world.options.resource.size) {
+      // [通信]发布加载进度
+      this.world.notify('progress', 100)
+      // [通信]发布资源加载完毕
+      this.world.notify('ready', this.resource)
+      return
+    }
+
     // 一.全局加载管理器
     // DefaultLoadingManager.onProgress = (_url, loaded, total) => {
     //   // [通信]发布加载进度

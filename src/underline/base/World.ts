@@ -86,14 +86,13 @@ export class World extends Emit implements LifeCycle {
   public onConfig(): void {
     /**
      * [生命周期]初始化
-     * - loader 资源初始化
      * - component 场景初始化
      * - light 灯光初始化
      * - render 渲染器初始化
      * - camera 相机初始化（控制器需要渲染器的 dom，因此在 render 之后）
      * - composer 合成器初始化
+     * - loader 资源初始化
      */
-    this.getComponent(ComponentType.LOADER)?.onConfig()
     this.componentList.forEach(item => item.onConfig())
     this.getComponent(ComponentType.LIGHT)?.onConfig()
     this.getComponent(ComponentType.RENDER)?.onConfig()
@@ -111,6 +110,8 @@ export class World extends Emit implements LifeCycle {
     window.addEventListener('resize', this.onResize, false)
     // 初始化执行一次更新屏幕尺寸
     this.onResize()
+
+    this.getComponent(ComponentType.LOADER)?.onConfig()
   }
 
   public onReady(resource?: SceneResource): void {
@@ -255,9 +256,14 @@ export class World extends Emit implements LifeCycle {
     this.componentMap.clear()
 
     // 卸载 webgl 主渲染器 + css2d、css3d 辅渲染器
-    this.options.domElement.removeChild(this.render.renderer.domElement)
-    this.render.cssRenderer &&
+    this.options.domElement.contains(this.render.renderer.domElement) &&
+      this.options.domElement.removeChild(this.render.renderer.domElement)
+    if (
+      this.render.cssRenderer &&
+      this.options.domElement.contains(this.render.cssRenderer.domElement)
+    ) {
       this.options.domElement.removeChild(this.render.cssRenderer.domElement)
+    }
 
     // 卸载帧率监控器
     this.stats && this.options.domElement.removeChild(this.stats.dom)
