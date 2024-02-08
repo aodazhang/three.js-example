@@ -24,7 +24,7 @@ export class DefaultCamera extends BaseCamera {
   override onConfig(): void {
     // 1.相机
     this.camera = new PerspectiveCamera(45, 1, 1, 1000)
-    this.camera.position.set(-30, 30, 60)
+    this.camera.position.set(-5, 5, 10)
     this.camera.lookAt(new Vector3(0, 0, 0))
 
     // 2.相机控制器
@@ -46,7 +46,7 @@ export class DefaultCamera extends BaseCamera {
     this.axesHelper = new AxesHelper(100)
     this.world.scene.add(this.axesHelper)
     // 网格 helper
-    this.gridHelper = new GridHelper(200, 200)
+    this.gridHelper = new GridHelper(100, 100)
     this.world.scene.add(this.gridHelper)
   }
 

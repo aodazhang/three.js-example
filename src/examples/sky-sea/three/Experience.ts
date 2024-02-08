@@ -18,8 +18,9 @@ export default class Experience extends World {
   override onDebug(): void {
     super.onDebug()
 
-    // 关闭 gridHelper
+    // 调整相机
     const camera = this.getComponent<DefaultCamera>(ComponentType.CAMERA)
+    camera.camera.position.set(-30, 30, 60)
     camera.gridHelper.dispose()
     this.scene.remove(camera.gridHelper)
   }

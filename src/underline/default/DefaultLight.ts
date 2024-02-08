@@ -33,12 +33,12 @@ export class DefaultLight extends BaseLight {
       new MeshBasicMaterial({ color: 0xff0000 })
     )
     directionalTarget.position.set(0, 0, 0)
-    this.world.scene.add(directionalTarget)
+    // this.world.scene.add(directionalTarget)
     // 平行光
     this.directional = new DirectionalLight(0xcfebff, 0.4)
     this.directional.name = 'directional'
     this.directional.target = directionalTarget
-    this.directional.position.set(83, 30, 100)
+    this.directional.position.set(30, 10, 40)
     this.world.scene.add(this.directional)
     // [阴影]平行光阴影参数（投射阴影）
     if (this.world.options.useShadowMap === true) {

@@ -5,13 +5,13 @@ uniform float iTime;
 uniform float uDistort;
 varying vec2 vUv;
 
-vec3 distort(vec3 p){
-  float noise=cnoise(p+iTime);
-  p+=noise*normal*uDistort;
+vec3 distort(vec3 p) {
+  float noise = cnoise(p + iTime);
+  p += noise * normal * uDistort;
   return p;
 }
 
-void main(){
+void main() {
   /**
   * Three.js 传递变量（可不声明直接使用）
   * - attribute vec3 position：顶点坐标
@@ -25,7 +25,7 @@ void main(){
   * - uniform bool isOrthographic：是否正交投影相机
   * - uniform mat3 normalMatrix：法线矩阵，用于将顶点着色器的法向量转换为相机空间中的法向量
   */
-  gl_Position=projectionMatrix*modelViewMatrix*vec4(distort(position),1.);
-  
-  vUv=uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(distort(position), 1.0);
+
+  vUv = uv;
 }

@@ -21,7 +21,7 @@ export default class TestObject extends Component<Experience> {
   override onReady(_resource?: SceneResource): void {
     // 一.球体
     this.sphere = new Mesh(
-      new SphereGeometry(20, 512, 512),
+      new SphereGeometry(1, 128, 128),
       new ShaderMaterial({
         uniforms: this.uniforms,
         vertexShader,
@@ -38,7 +38,7 @@ export default class TestObject extends Component<Experience> {
       .add(this.uniforms.uDistort, 'value')
       .name('噪波强度')
       .min(0)
-      .max(3)
+      .max(1)
       .step(0.1)
   }
 

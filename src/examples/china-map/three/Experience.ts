@@ -1,4 +1,4 @@
-import { World } from '@/underline'
+import { ComponentType, DefaultCamera, DefaultLight, World } from '@/underline'
 import resource from './resource'
 import Environment from './component/Environment'
 import Map from './component/Map'
@@ -13,5 +13,16 @@ export default class Experience extends World {
 
     this.addComponent(new Environment(this))
     this.addComponent(new Map(this))
+  }
+
+  override onConfig(): void {
+    super.onConfig()
+
+    // 调整相机
+    const camera = this.getComponent<DefaultCamera>(ComponentType.CAMERA)
+    camera.camera.position.set(0, 90, 90)
+
+    const light = this.getComponent<DefaultLight>(ComponentType.LIGHT)
+    light.directional.position.set(83, 30, 100)
   }
 }
