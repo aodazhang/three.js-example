@@ -18,7 +18,6 @@ export default class Experience extends World {
   override onConfig(): void {
     super.onConfig()
 
-    // 调整相机
     const camera = this.getComponent<DefaultCamera>(ComponentType.CAMERA)
     camera.camera.position.set(0, 90, 90)
 
