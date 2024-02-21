@@ -15,13 +15,18 @@ export default class Experience extends World {
     this.addComponent(new Environment(this))
   }
 
+  override onConfig(): void {
+    super.onConfig()
+
+    const camera = this.getComponent<DefaultCamera>(ComponentType.CAMERA)
+    camera.camera.position.set(-30, 30, 60)
+  }
+
   override onDebug(): void {
     super.onDebug()
 
-    // 调整相机
     const camera = this.getComponent<DefaultCamera>(ComponentType.CAMERA)
-    camera.camera.position.set(-30, 30, 60)
-    camera.gridHelper.dispose()
+    camera.gridHelper?.dispose()
     this.scene.remove(camera.gridHelper)
   }
 }
