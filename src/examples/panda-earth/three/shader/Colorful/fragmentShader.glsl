@@ -13,13 +13,13 @@ varying vec2 vUv;
 */
 mat4 brightnessMatrix(float brightness) {
   return mat4(
-  // 
+  //
   1, 0, 0, 0,
-  // 
+  //
   0, 1, 0, 0,
-  // 
+  //
   0, 0, 1, 0,
-  // 
+  //
   brightness, brightness, brightness, 1);
 }
 
@@ -31,13 +31,13 @@ mat4 brightnessMatrix(float brightness) {
 mat4 contrastMatrix(float contrast) {
   float t = (1.0 - contrast) / 2.0;
   return mat4(
-  // 
+  //
   contrast, 0, 0, 0,
-  // 
+  //
   0, contrast, 0, 0,
-  // 
+  //
   0, 0, contrast, 0,
-  // 
+  //
   t, t, t, 1);
 }
 
@@ -61,13 +61,13 @@ mat4 saturationMatrix(float saturation) {
   blue += vec3(0, 0, saturation);
 
   return mat4(
-  // 
+  //
   red, 0,
-  // 
+  //
   green, 0,
-  // 
+  //
   blue, 0,
-  // 
+  //
   0, 0, 0, 1);
 }
 

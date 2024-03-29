@@ -16,6 +16,7 @@ lerna-debug.log*
 # 忽略编辑器文件
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 *.suo
 *.ntvs*
