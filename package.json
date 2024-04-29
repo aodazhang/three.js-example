@@ -45,7 +45,9 @@
     "arrowParens": "avoid",
     "trailingComma": "none",
     "bracketSpacing": true,
-    "bracketSameLine": false
+    "bracketSameLine": false,
+    "jsxSingleQuote": false,
+    "endOfLine": "lf"
   },
   "lint-staged": {
     "*.{js,json,md,ts,vue}": [
