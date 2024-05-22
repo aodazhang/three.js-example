@@ -1,10 +1,15 @@
 # 忽略文件夹
 .DS_Store
+coverage
 dist
-dist-ssr
 node_modules
 
-# Logs
+# 忽略环境配置文件
+*.local
+.env.local
+.env.*.local
+
+# 忽略日志文件
 logs
 *.log
 npm-debug.log*

@@ -9,7 +9,7 @@ import glsl from 'vite-plugin-glsl'
 import { compression } from 'vite-plugin-compression2'
 
 /**
- * vite坑点总结：
+ * vite 坑点总结：
  * 1.环境变量文件 .env 不允许配置 NODE_ENV
  * 2.环境变量加载特殊字符串时会有问题，例如 secret.ts 中的密钥
  * 3.对于部分库必须允许 ts 合成 import，否则打包后运行会报错，例如 day.js
@@ -61,5 +61,12 @@ export default defineConfig({
      * 仓库：https://github.com/nonzzz/vite-plugin-compression
      */
     compression()
-  ]
+  ],
+  // 6.构建
+  build: {
+    sourcemap: false,
+    // 资源 > 4kb 复制到输出目录并将其 url 内联到打包输出的 js 中
+    // 资源 < 4kb 作为 dataURI 内联到打包输出的 js 中
+    assetsInlineLimit: 4 * 1024
+  }
 })

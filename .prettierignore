@@ -1,4 +1,5 @@
 .DS_Store
+.husky
+coverage
 dist
-dist-ssr
 node_modules
